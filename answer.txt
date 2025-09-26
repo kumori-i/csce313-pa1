@@ -1,0 +1,49 @@
+To initialize this test for time, I ran `truncate -s 10000000 BIMDC/test.bin` to establish the 10MB file. Then I evaluated the time with `time ./client -f test.bin`. 
+
+These are the results I got: 
+```
+File size reported by server: 10000000 bytes
+Total Bytes/10000000
+File transfer complete: received/test.bin
+Client-side is done and exited
+Server terminated
+
+real    0m3.042s
+user    0m0.917s
+sys     0m1.937s
+
+```
+
+Repeating this 4 more times with these file sizes (20MB, 40MB, 80MB, 100MB) these are the results I got:
+
+```
+real    0m5.949s
+user    0m1.609s
+sys     0m4.037s
+```
+
+```
+real    0m8.384s
+user    0m2.481s
+sys     0m5.160s
+```
+
+```
+real    0m14.069s
+user    0m4.510s
+sys     0m9.021s
+```
+
+```
+real    0m16.908s
+user    0m5.617s
+sys     0m10.725s
+```
+
+Please view the `chart.pdf` for the chart that displays this data.
+
+The reason behind this trend is because of the increased communication between the client and the server for transfering the bytes. The larger the file the more communcation is needed between the client and the server.
+
+The main bottleneck is the communication between the client and the server using FIFO. According to the documentation, the client uses the `cread` and `cwrite` functions to communicate between the server causing the program execution to be longer.
+
+Additionally, we set the buffer size to 256. If this was increased, it might speed up the process of the communication.
