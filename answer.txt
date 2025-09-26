@@ -42,8 +42,10 @@ sys     0m10.725s
 
 Please view the `chart.pdf` for the chart that displays this data.
 
+On average, according to this data, the program execution spends roughly two-thirds of its time in the system space. Meaning, the program spends most of its time in the kernel rather than the hard computation of transfering.
+
 The reason behind this trend is because of the increased communication between the client and the server for transfering the bytes. The larger the file the more communcation is needed between the client and the server.
 
 The main bottleneck is the communication between the client and the server using FIFO. According to the documentation, the client uses the `cread` and `cwrite` functions to communicate between the server causing the program execution to be longer.
 
-Additionally, we set the buffer size to 256. If this was increased, it might speed up the process of the communication.
+Additionally, we set the buffer size to 256. Each message can only be a certain size, so the larger the file the more common the communication between the client and the server is. If this was increased, it might speed up the process by reducing the amount of the communication.
